@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class SceneRenderModule : MonoBehaviour {
     // get input from INPUT-module
-    public GameObject mlModel;
-    public MLModel mlmodel;
-    public float[,] inputArray;
+    public MLModel mlModel;
+    public int[] actionArray;
 
     // Use this for initialization
     void Start () {
-		
-	}
+        // get input from ML module
+        mlModel = GameObject.Find("ML_module").GetComponent<MLModel>();
+        actionArray = mlModel.outputArray;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        actionArray = mlModel.outputArray;
+    }
+
+    void RenderScene()
+    {
+
+    }
 }

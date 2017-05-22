@@ -13,15 +13,15 @@ public class MLModel : MonoBehaviour {
     private int rowLength;
 
     // feed output to SceneRENDER-module
-    //public GameObject sceneRenderModule;
-    //public int[,] outputArray;
+    public int[] outputArray;
 
     // Using dummy model for now
     void Start () {
-        // initialize ML clock (cycle with tau = number of frames)
+        // set cycle for ML clock (unit: tau = number of frames)
         tau = 10;
 
-        //
+        // set output array
+        outputArray = new int[3];
 	}
 	
 	// Update is called once per frame
@@ -44,11 +44,10 @@ public class MLModel : MonoBehaviour {
 
         // run ML model
         int category = RunMLModel();
-        Debug.Log(category);
+        //Debug.Log(category);
 
         // get actions from policy list
-        getActions();
-
+        GetActions(category);
     }
 
     private int RunMLModel()
@@ -92,13 +91,37 @@ public class MLModel : MonoBehaviour {
 
         return zone;
     }
-
-    public void getActions()
+    public int prevZone;
+    public void GetActions(int currentZone)
     {
-        // update obj matrix
-
+        // look up policy retrieve action
+        // POLICY: if the zone has changed, flip the switch
+        if(prevZone != currentZone)
+        {
+            // update action matrix
+            FlipActionMatrix();
+        }
+        prevZone = currentZone;
     }
 
+    /* POLICY functions */
+    public void FlipActionMatrix()
+    {
+        for (int i = 0; i < outputArray.Length; i++)
+        {
+            if (outputArray[i] == 1)
+            {
+                outputArray[i] = 0;
+            }
+            else
+            {
+                outputArray[i] = 1;
+            }
+        }
+    }
+
+
+    /* helper functions*/
     public string PrintTwoDArray(float[,] arr)
     {
         string strDebug = "";
