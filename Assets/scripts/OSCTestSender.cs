@@ -12,7 +12,7 @@ public class OSCTestSender : MonoBehaviour
 
     private Osc oscHandler;
     public MicrophoneInput myMic;
-    public InputModule myHeadset;
+    public DataInputModule myHeadset;
     public string remoteIp;
     public int sendToPort;
     public int listenerPort;
