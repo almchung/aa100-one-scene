@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System;
 
-public class MeasuringStats : MonoBehaviour {
+public class InputModule : MonoBehaviour {
     public Vector3 prevAngle;
     public Vector3 prevPosition;
     public Vector3 currentPosition;
@@ -18,9 +18,22 @@ public class MeasuringStats : MonoBehaviour {
     private string filePath;
     private string delimiter = ",";
 
+    // feed input into ML-module
+    public GameObject mlModel;
+    public MLModel mlmodel;
+    public float[,] inputArray;
+    private int currentframe = 0;
+
     void Start () {
         // linear scale for better velocity calculation
         linear_scale = 100;
+
+        // populate input array with zeros
+        ResetInputArray();
+
+        // bind MLModel
+        mlModel = GameObject.Find("ML_module");
+        mlmodel = mlModel.GetComponent<MLModel>();
 
         // debug purpose: initialized CSV file
         currentTime = DateTime.Now;
@@ -55,8 +68,32 @@ public class MeasuringStats : MonoBehaviour {
 
             //Debug.Log("Pos: " + currentPosition + ", Angle: " + currentAngle + ", Linear Vel:" + velocity + ", Angular Vel:" + angularVel);
             currentTime = DateTime.Now;
+            UpdateInputMatrix(Time.frameCount, currentPosition, currentAngle, velocity, angularVel);
             WriteVectorsToCSV(currentTime.ToString("hh:mm:ss.fff tt"), currentPosition, currentAngle, velocity, angularVel);
         }
+    }
+
+    // INPUT for ML-MODULE
+    public void UpdateInputMatrix(int frame, Vector3 pos, Vector3 ang, Vector3 vel, Vector3 avel)
+    {
+        int ind = frame % mlmodel.tau;
+        inputArray[ind, 0] = pos.x;
+        inputArray[ind, 1] = pos.y;
+        inputArray[ind, 2] = pos.z;
+        inputArray[ind, 3] = ang.x;
+        inputArray[ind, 4] = ang.y;
+        inputArray[ind, 5] = ang.z;
+        inputArray[ind, 6] = vel.x;
+        inputArray[ind, 7] = vel.y;
+        inputArray[ind, 8] = vel.z;
+        inputArray[ind, 9] = avel.x;
+        inputArray[ind, 10] = avel.y;
+        inputArray[ind, 11] = avel.z;
+    }
+
+    public void ResetInputArray()
+    {
+        inputArray = new float[mlmodel.tau, 12];
     }
 
     // debug purpose: recording raw data
