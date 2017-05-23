@@ -74,14 +74,14 @@ public class MLModel : MonoBehaviour {
             }
             else
             {
-                zone = 1;
+                zone = 2;
             }
         }
         else
         {
             if (mean[4] / 10 > 360 / 2)
             {
-                zone = 2;
+                zone = 1;
             }
             else
             {
@@ -95,6 +95,8 @@ public class MLModel : MonoBehaviour {
     public void GetActions(int currentZone)
     {
         // look up policy retrieve action
+
+        /*
         // POLICY: if the zone has changed, flip the switch
         if(prevZone != currentZone)
         {
@@ -102,6 +104,13 @@ public class MLModel : MonoBehaviour {
             FlipActionMatrix();
         }
         prevZone = currentZone;
+        */
+
+        // POLICY: if the zone is an even number flip the switch
+        if (currentZone % 2 == 0)
+        {
+            FlipActionMatrix();
+        }
     }
 
     /* POLICY functions */
