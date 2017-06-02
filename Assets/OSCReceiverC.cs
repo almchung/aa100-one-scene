@@ -26,7 +26,7 @@ public class OSCReceiverC : MonoBehaviour {
 
 
         //Tell Unity to call function Example1 when message /wek/outputs arrives
-        handler.SetAddressHandler("/wek/outputs", messageHandler);
+        handler.SetAddressHandler("/outputs", messageHandler);
     }
 	
 	// Update is called once per frame
