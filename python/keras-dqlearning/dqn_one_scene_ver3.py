@@ -65,9 +65,8 @@ class DQNAgent:
         self.model.save_weights(name)
 
 
-if __name__ == "__main__":
-    #state_size = env.observation_space.shape[0] # 4
-    #action_size = env.action_space.n # 2
+if __name__ == "__main__":  # main function
+    # setup Learning Model
     state_size = 14
     num_objects = 30
     num_angle_step = 6
@@ -81,14 +80,44 @@ if __name__ == "__main__":
     done = False
     batch_size = 32
 
-    for e in range(EPISODES):
+    # setup OSC parts
+    initOSCClient() # takes args : ip, port
+    print 'client'
+    initOSCServer() # takes args : ip, port, mode --> 0 for basic server, 1 for threading server, 2 for forking server
+    print 'server'
+
+    # bind addresses to functions
+    setOSCHandler('/outputs', inputHandler)
+    print 'check'
+
+    startOSCServer() # and now set it into action
+
+    print 'ready to receive and send osc messages ...'
+
+def inputHandler(addr, tags, data, source):
         # get input from Unity via OSC
+        print "received new osc msg from %s" % getUrlStr(source)
+        print "addr : %s" % addr
+        #print "typetags :%s" % tags
+        print "data: %s" % data
+
+def outputHandler(data):
+        sendOSCMsg("/inputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
+
+
+def runModel():
+    #for e in range(EPISODES):
+        # get input from Unity via OSC
+        print "received new osc msg from %s" % getUrlStr(source)
+        print "addr : %s" % addr
+        #print "typetags :%s" % tags
+        print "data: %s" % data
 
         #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
         state = np.reshape(state, [1, state_size])
         print 'current state (supposedly angles + object id): ', state
 
-        for time in range(500):
+        #for time in range(500):
             action = agent.act(state)
             print 'action: ', action
             act_rotate = True if action % num_rotation_bool == 0 else False

@@ -46,14 +46,12 @@ def printing_handler(addr, tags, data, source):
     print "the actual data is : %s" % data
     print "---"
 
-
-
 def initOSCClient(ip='127.0.0.1', port=12000) :
     global client
     client = OSCClient()
     client.connect( (ip,port) )
 
-def initOSCServer(ip='127.0.0.1', port=9000, mode=0) :
+def initOSCServer(ip='127.0.0.1', port=6448, mode=0) :
     """ mode 0 for basic server, 1 for threading server, 2 for forking server
     """
     global server, st
