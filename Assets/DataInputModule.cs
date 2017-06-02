@@ -15,6 +15,7 @@ public class DataInputModule : MonoBehaviour {
     public float linear_scale;
     private DateTime currentTime;
     public string message;
+    public int entertained;
 
     private string filePath;
     private string delimiter = ",";
@@ -40,7 +41,7 @@ public class DataInputModule : MonoBehaviour {
         // debug purpose: initialized CSV file
         currentTime = DateTime.Now;
         filePath = Directory.GetCurrentDirectory() + "\\data_"+ currentTime.ToString("yyyy-MM-dd-HH-mm-ss") + ".csv";
-        Debug.Log("CSV file writing to : " + filePath);
+        //Debug.Log("CSV file writing to : " + filePath);
 
         string[] output = new string[] { filePath, "linear scale factor", linear_scale.ToString()};
         WriteToCSV(output);
@@ -53,6 +54,13 @@ public class DataInputModule : MonoBehaviour {
     void Update()
     {
         MeasureVRHead();
+        if (Input.GetAxis("Jump") != 0)
+        {
+            entertained = 1;
+        } else
+        {
+            entertained = 0;
+        }
     }
 
     private void MeasureVRHead()
@@ -68,7 +76,7 @@ public class DataInputModule : MonoBehaviour {
             angularVel = currentAngle - prevAngle;
             prevAngle = currentAngle;
 
-            Debug.Log("Pos: " + currentPosition + ", Angle: " + currentAngle + ", Linear Vel:" + velocity + ", Angular Vel:" + angularVel);
+            //Debug.Log("Pos: " + currentPosition + ", Angle: " + currentAngle + ", Linear Vel:" + velocity + ", Angular Vel:" + angularVel);
             currentTime = DateTime.Now;
             UpdateInputMatrix(Time.frameCount, currentPosition, currentAngle, velocity, angularVel);
             WriteVectorsToCSV(currentTime.ToString("hh:mm:ss.fff tt"), currentPosition, currentAngle, velocity, angularVel);
@@ -94,7 +102,7 @@ public class DataInputModule : MonoBehaviour {
         inputArray[ind, 10] = avel.y;
         inputArray[ind, 11] = avel.z;
         
-        message = "/inputs " + pos.x +" "+ pos.y + " " + pos.z + " " + ang.x + " " + ang.y + " " + ang.z + " " + vel.x + " " + vel.y + " " + vel.z + " " + avel.x + " " + avel.y + " " + avel.z;
+        message = pos.x + " " + pos.y + " " + pos.z + " " + ang.x + " " + ang.y + " " + ang.z + " " + vel.x + " " + vel.y + " " + vel.z + " " + avel.x + " " + avel.y + " " + avel.z + " " + entertained;
     }
 
     public void ResetInputArray()

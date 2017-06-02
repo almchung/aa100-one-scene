@@ -15,32 +15,36 @@ public class SwapingObjects : MonoBehaviour {
     public float scaleMultiplier = 1f;
     public float distanceMultiplier;
     public GameObject player;
-    
-    private GameObject currentObject;
+    public OSCReceiverC data;
+    private GameObject[] currentObjects;
+    private int index = 0;
 	// Use this for initialization
 	void Start () {
-
-	}
+        currentObjects = new GameObject [5];
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetAxis("Jump") != 0)
+        newSelectedModel = data.act_object;
+        discretePolar = data.act_angle;
+        rotation = data.act_rotate;
+        scale = data.act_scale;
+        distance = data.act_dist;
+
+        if (newSelectedModel != selectedModel)
         {
-            SpawnObject();
-        }
-		if(newSelectedModel != selectedModel)
-        {
+
             selectedModel = newSelectedModel;
             SpawnObject();
+            index++;
         }
 	}
 
     void SpawnObject()
     {
-        transform.rotation = player.transform.rotation;
-        if(currentObject != null)
+        if(currentObjects[index] != null)
         {
-            GameObject.Destroy(currentObject);
+            GameObject.Destroy(currentObjects[index]);
         }
         float angle = (Mathf.PI/2) * (polarPosition/discretePolar);
         angle -= ((player.transform.localRotation.eulerAngles.y - 45 )/ 360) * Mathf.PI * 2;
@@ -49,13 +53,13 @@ public class SwapingObjects : MonoBehaviour {
         float posZ = Mathf.Sin(angle) * Hypotenuse;
         float objScale = scale * scaleMultiplier + minScale;
         Vector3 position = new Vector3(posX, 0, posZ); 
-        currentObject = Instantiate(prefabs[newSelectedModel], position, Quaternion.identity);
-        currentObject.transform.LookAt(transform);
+        currentObjects[index] = Instantiate(prefabs[newSelectedModel], position, Quaternion.identity);
+        currentObjects[index].transform.LookAt(transform);
         if (rotation)
         {
-            currentObject.transform.Rotate(new Vector3(0, Random.Range(0f, 360f), 0));
+            currentObjects[index].transform.Rotate(new Vector3(0, Random.Range(0f, 360f), 0));
         }
         
-        currentObject.transform.localScale = new Vector3(objScale, objScale, objScale);
+        currentObjects[index].transform.localScale = new Vector3(objScale, objScale, objScale);
     }
 }

@@ -34,11 +34,7 @@ public class OSCTestSender : MonoBehaviour
     /// </summary>
     void Update()
     {
-        //Debug.LogWarning("time = " + Time.time);
-        
-        OscMessage oscM = Osc.StringToOscMessage(myHeadset.message);
-        Debug.Log(myHeadset.message);
-        oscHandler.Send(oscM);  
+        //Debug.LogWarning("time = " + Time.time);  
     }
 
     /// <summary>
@@ -47,6 +43,26 @@ public class OSCTestSender : MonoBehaviour
     void Awake()
     {
        
+    }
+
+    public void Send(string prefix)
+    {
+        string message = prefix + myHeadset.message;
+        OscMessage oscM = Osc.StringToOscMessage(myHeadset.message);
+        //Debug.Log(myHeadset.message);
+        oscHandler.Send(oscM);
+    }
+
+    public void SendNext()
+    {
+        StartCoroutine(WaitAndSend());
+    }
+
+    IEnumerator WaitAndSend()
+    {
+        yield return new WaitForSeconds(1);
+
+        Send("inputNext ");
     }
 
     void OnDisable()
@@ -74,7 +90,7 @@ public class OSCTestSender : MonoBehaviour
 
     public static void Example(OscMessage m)
     {
-        Debug.Log("--------------> OSC example message received: ("+m+")");
+        //Debug.Log("--------------> OSC example message received: ("+m+")");
     }
 
 
