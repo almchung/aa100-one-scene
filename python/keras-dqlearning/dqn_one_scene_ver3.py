@@ -82,23 +82,27 @@ if __name__ == "__main__":
     batch_size = 32
 
     for e in range(EPISODES):
+        # get input from Unity via OSC
 
-        state = np.random.normal(size=state_size) # <- Must receive message via OSC.
+        #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
         state = np.reshape(state, [1, state_size])
         print 'current state (supposedly angles + object id): ', state
 
         for time in range(500):
-            action = agent.act(state) # 0~277
+            action = agent.act(state)
             print 'action: ', action
-            act_rotate = True if action % 2 == 0 else False
-            action /= 2
-            act_scale = action % 4
-            action /= 4
-            act_angle = action % 6
-            action /= 30
+            act_rotate = True if action % num_rotation_bool == 0 else False
+            action /= num_rotation_bool
+            act_scale = action % num_scale_step
+            action /= num_scale_step
+            act_dist = action % num_dist_step
+            action /= num_dist_step
+            act_angle = action % num_angle_step
+            action /= num_angle_step
             act_object = action
             print 'object: ', act_object
             print 'angle: ', act_angle
+            print 'dist: ', act_dist
             print 'scale: ', act_scale
             print 'rotate: ', act_rotate
             # Must send this action back to Unity via OSC.
