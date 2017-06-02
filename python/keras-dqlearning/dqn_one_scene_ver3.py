@@ -8,10 +8,8 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.optimizers import Adam
 
-from pythonosc import osc_message_builder
-from pythonosc import osc_server
-from pythonosc import udp_client
-from pythonosc import dispather
+from simpleOSC import initOSCClient, initOSCServer, setOSCHandler, sendOSCMsg, closeOSC, \
+     createOSCBundle, sendOSCBundle, startOSCServer
 
 EPISODES = 20
 
@@ -71,7 +69,12 @@ if __name__ == "__main__":
     #state_size = env.observation_space.shape[0] # 4
     #action_size = env.action_space.n # 2
     state_size = 14
-    action_size = 288 # 6 objects, 6 angles, 4 scales, 2 rotations => 288
+    num_objects = 30
+    num_angle_step = 6
+    num_scale_step = 4
+    num_dist_step = 4
+    num_rotation_bool = 2
+    action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
 
     agent = DQNAgent(state_size, action_size)
     # agent.load("./save/cartpole-master.h5")
@@ -79,6 +82,7 @@ if __name__ == "__main__":
     batch_size = 32
 
     for e in range(EPISODES):
+
         state = np.random.normal(size=state_size) # <- Must receive message via OSC.
         state = np.reshape(state, [1, state_size])
         print 'current state (supposedly angles + object id): ', state
@@ -91,7 +95,7 @@ if __name__ == "__main__":
             act_scale = action % 4
             action /= 4
             act_angle = action % 6
-            action /= 6
+            action /= 30
             act_object = action
             print 'object: ', act_object
             print 'angle: ', act_angle
