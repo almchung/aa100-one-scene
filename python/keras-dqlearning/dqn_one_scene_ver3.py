@@ -64,6 +64,13 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
+def inputHandler(addr, tags, data, source):
+    # get input from Unity via OSC
+    print "received new osc msg from %s" % getUrlStr(source)
+    print "addr : %s" % addr
+    #print "typetags :%s" % tags
+    print "data: %s" % data
+
 
 if __name__ == "__main__":  # main function
     # setup Learning Model
@@ -94,12 +101,6 @@ if __name__ == "__main__":  # main function
 
     print 'ready to receive and send osc messages ...'
 
-def inputHandler(addr, tags, data, source):
-    # get input from Unity via OSC
-    print "received new osc msg from %s" % getUrlStr(source)
-    print "addr : %s" % addr
-    #print "typetags :%s" % tags
-    print "data: %s" % data
 
 def outputHandler(data):
     sendOSCMsg("/inputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
@@ -150,10 +151,10 @@ def runModel():
 
     agent.remember(state, action, reward, next_state, done)
     state = next_state
+
     if done:
         print("episode: {}/{}, score: {}, e: {:.2}"
-              .format(e, EPISODES, time, agent.epsilon))
-        break
+            .format(e, EPISODES, time, agent.epsilon))
         #if len(agent.memory) > batch_size:
         #    agent.replay(batch_size)
         # if e % 10 == 0:
