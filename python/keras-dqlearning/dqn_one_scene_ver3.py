@@ -95,66 +95,66 @@ if __name__ == "__main__":  # main function
     print 'ready to receive and send osc messages ...'
 
 def inputHandler(addr, tags, data, source):
-        # get input from Unity via OSC
-        print "received new osc msg from %s" % getUrlStr(source)
-        print "addr : %s" % addr
-        #print "typetags :%s" % tags
-        print "data: %s" % data
+    # get input from Unity via OSC
+    print "received new osc msg from %s" % getUrlStr(source)
+    print "addr : %s" % addr
+    #print "typetags :%s" % tags
+    print "data: %s" % data
 
 def outputHandler(data):
-        sendOSCMsg("/inputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
+    sendOSCMsg("/inputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
 
 
 def runModel():
     #for e in range(EPISODES):
-        # get input from Unity via OSC
-        print "received new osc msg from %s" % getUrlStr(source)
-        print "addr : %s" % addr
-        #print "typetags :%s" % tags
-        print "data: %s" % data
+    # get input from Unity via OSC
+    print "received new osc msg from %s" % getUrlStr(source)
+    print "addr : %s" % addr
+    #print "typetags :%s" % tags
+    print "data: %s" % data
 
-        #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
-        state = np.reshape(state, [1, state_size])
-        print 'current state (supposedly angles + object id): ', state
+    #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
+    state = np.reshape(state, [1, state_size])
+    print 'current state (supposedly angles + object id): ', state
 
-        #for time in range(500):
-            action = agent.act(state)
-            print 'action: ', action
-            act_rotate = True if action % num_rotation_bool == 0 else False
-            action /= num_rotation_bool
-            act_scale = action % num_scale_step
-            action /= num_scale_step
-            act_dist = action % num_dist_step
-            action /= num_dist_step
-            act_angle = action % num_angle_step
-            action /= num_angle_step
-            act_object = action
-            print 'object: ', act_object
-            print 'angle: ', act_angle
-            print 'dist: ', act_dist
-            print 'scale: ', act_scale
-            print 'rotate: ', act_rotate
-            # Must send this action back to Unity via OSC.
+    #for time in range(500):
+    action = agent.act(state)
+    print 'action: ', action
+    act_rotate = True if action % num_rotation_bool == 0 else False
+    action /= num_rotation_bool
+    act_scale = action % num_scale_step
+    action /= num_scale_step
+    act_dist = action % num_dist_step
+    action /= num_dist_step
+    act_angle = action % num_angle_step
+    action /= num_angle_step
+    act_object = action
+    print 'object: ', act_object
+    print 'angle: ', act_angle
+    print 'dist: ', act_dist
+    print 'scale: ', act_scale
+    print 'rotate: ', act_rotate
+    # Must send this action back to Unity via OSC.
 
-            #next_state, reward, done, _ = env.step(action)
-            #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
+    #next_state, reward, done, _ = env.step(action)
+    #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
 
-            # Must update next_state, reward, done via OSC.
+    # Must update next_state, reward, done via OSC.
 
-            next_state = np.random.normal(size=state_size)
+    next_state = np.random.normal(size=state_size)
 
-            done = True if next_state[1] < 0 and next_state[2] < 0 and next_state[3] < 0 else False
-            reward = 1 if not done else -10
+    done = True if next_state[1] < 0 and next_state[2] < 0 and next_state[3] < 0 else False
+    reward = 1 if not done else -10
 
-            next_state = np.reshape(next_state, [1, state_size])
+    next_state = np.reshape(next_state, [1, state_size])
 
-            agent.remember(state, action, reward, next_state, done)
-            state = next_state
-            if done:
-                print("episode: {}/{}, score: {}, e: {:.2}"
-                      .format(e, EPISODES, time, agent.epsilon))
-                break
-        if len(agent.memory) > batch_size:
-            agent.replay(batch_size)
+    agent.remember(state, action, reward, next_state, done)
+    state = next_state
+    if done:
+        print("episode: {}/{}, score: {}, e: {:.2}"
+              .format(e, EPISODES, time, agent.epsilon))
+        break
+        #if len(agent.memory) > batch_size:
+        #    agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole.h5")
