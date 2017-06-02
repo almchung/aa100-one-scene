@@ -37,7 +37,7 @@ public class OSCTestSender : MonoBehaviour
     {
         //Debug.LogWarning("time = " + Time.time);
         
-        OscMessage oscM = Osc.StringToOscMessage("/wek/inputs " + myMic.loudness + ' ' + myHeadset.currentAngle.x + ' ' + myHeadset.currentAngle.y + ' ' + myHeadset.currentAngle.z);
+        OscMessage oscM = Osc.StringToOscMessage("/inputs " + myMic.loudness + ' ' + myHeadset.currentAngle.x + ' ' + myHeadset.currentAngle.y + ' ' + myHeadset.currentAngle.z);
         Debug.Log(oscM);
         oscHandler.Send(oscM);  
     }

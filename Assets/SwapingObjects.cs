@@ -6,25 +6,28 @@ public class SwapingObjects : MonoBehaviour {
     public GameObject[] prefabs;
     public int selectedModel;
     public int newSelectedModel;
-    public float polarPosition;
-    public float rotation;
-    public float distance;
-    public float scale;
+    public int polarPosition; //6
+    public int discretePolar = 6; 
+    public float rotation; //bool
+    public float distance; //4
+    public float scale; //4
     public float minScale = 0.5f;
     public float scaleMultiplier = 1f;
     public float distanceMultiplier;
+    public GameObject player;
     
     private GameObject currentObject;
 	// Use this for initialization
 	void Start () {
-		if(selectedModel != null)
-        {
-            SpawnObject();
-        }
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetAxis("Jump") != 0)
+        {
+            SpawnObject();
+        }
 		if(newSelectedModel != selectedModel)
         {
             selectedModel = newSelectedModel;
@@ -34,14 +37,16 @@ public class SwapingObjects : MonoBehaviour {
 
     void SpawnObject()
     {
+        transform.rotation = player.transform.rotation;
         if(currentObject != null)
         {
             GameObject.Destroy(currentObject);
         }
-        float angle = 2 * Mathf.PI * polarPosition;
+        float angle = (Mathf.PI/2) * (polarPosition/discretePolar);
+        angle -= ((player.transform.localRotation.eulerAngles.y - 45 )/ 360) * Mathf.PI * 2;
         float Hypotenuse = distance * distanceMultiplier;
-        float posX = Mathf.Sin(angle) * Hypotenuse;
-        float posZ = Mathf.Cos(angle) * Hypotenuse;
+        float posX = Mathf.Cos(angle) * Hypotenuse;
+        float posZ = Mathf.Sin(angle) * Hypotenuse;
         float objScale = scale * scaleMultiplier + minScale;
         Vector3 position = new Vector3(posX, 0, posZ); 
         currentObject = Instantiate(prefabs[newSelectedModel], position, Quaternion.identity);
