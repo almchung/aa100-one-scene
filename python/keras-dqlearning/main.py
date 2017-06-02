@@ -80,7 +80,7 @@ def nextHandler(addr, tags, data, source):
 
 if __name__ == "__main__":  # main function
     # setup Learning Model
-    state_size = 13
+    state_size = 14
     num_objects = 30
     num_angle_step = 6
     num_scale_step = 4
@@ -102,7 +102,7 @@ if __name__ == "__main__":  # main function
     # bind addresses to functions
     setOSCHandler('/inputs_current', currentState)
     setOSCHandler('/inputs_next', nextState)
-    print 'check'
+    print 'address binding check'
 
     startOSCServer() # and now set it into action
 
@@ -119,7 +119,7 @@ def currentState(data):
     #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
     #state = np.reshape(state, [1, state_size])
     state = data
-    print 'current state (supposedly angles + object id): ', state
+    print '>> current state : ', state
 
     #for time in range(500):
     action = agent.act(state)
@@ -146,7 +146,7 @@ def currentState(data):
     print 'dist: ', act_dist
     print 'scale: ', act_scale
     print 'rotate: ', act_rotate
-    
+
     # Must send this action back to Unity via OSC.
     sendOSCMsg("/outputs", action)
 
@@ -155,6 +155,8 @@ def currentState(data):
 
 def nextState(data):
     # Must update next_state, reward, done via OSC.
+    state = data
+    print '>> next state : ', state
     next_state = np.random.normal(size=state_size)
 
     done = True if data[13] == 0 else False
