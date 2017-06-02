@@ -1,0 +1,123 @@
+# -*- coding: utf-8 -*-
+import random
+import gym
+import numpy as np
+
+from collections import deque
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import Adam
+
+from pythonosc import osc_message_builder
+from pythonosc import osc_server
+from pythonosc import udp_client
+from pythonosc import dispather
+
+EPISODES = 20
+
+
+class DQNAgent:
+    def __init__(self, state_size, action_size):
+        self.state_size = state_size
+        self.action_size = action_size
+        self.memory = deque(maxlen=2000)
+        self.gamma = 0.95    # discount rate
+        self.epsilon = 1.0  # exploration rate
+        self.epsilon_min = 0.01
+        self.epsilon_decay = 0.995
+        self.learning_rate = 0.001
+        self.model = self._build_model()
+
+    def _build_model(self):
+        # Neural Net for Deep-Q learning Model
+        model = Sequential()
+        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(24, activation='relu'))
+        model.add(Dense(self.action_size, activation='linear'))
+        model.compile(loss='mse',
+                      optimizer=Adam(lr=self.learning_rate))
+        return model
+
+    def remember(self, state, action, reward, next_state, done):
+        self.memory.append((state, action, reward, next_state, done))
+
+    def act(self, state):
+        if np.random.rand() <= self.epsilon:
+            return random.randrange(self.action_size)
+        act_values = self.model.predict(state)
+        return np.argmax(act_values[0])  # returns action
+
+    def replay(self, batch_size):
+        minibatch = random.sample(self.memory, batch_size)
+        for state, action, reward, next_state, done in minibatch:
+            target = reward
+            if not done:
+              target = reward + self.gamma * \
+                       np.amax(self.model.predict(next_state)[0])
+            target_f = self.model.predict(state)
+            target_f[0][action] = target
+            self.model.fit(state, target_f, epochs=1, verbose=0)
+        if self.epsilon > self.epsilon_min:
+            self.epsilon *= self.epsilon_decay
+
+    def load(self, name):
+        self.model.load_weights(name)
+
+    def save(self, name):
+        self.model.save_weights(name)
+
+
+if __name__ == "__main__":
+    #state_size = env.observation_space.shape[0] # 4
+    #action_size = env.action_space.n # 2
+    state_size = 14
+    action_size = 288 # 6 objects, 6 angles, 4 scales, 2 rotations => 288
+
+    agent = DQNAgent(state_size, action_size)
+    # agent.load("./save/cartpole-master.h5")
+    done = False
+    batch_size = 32
+
+    for e in range(EPISODES):
+        state = np.random.normal(size=state_size) # <- Must receive message via OSC.
+        state = np.reshape(state, [1, state_size])
+        print 'current state (supposedly angles + object id): ', state
+
+        for time in range(500):
+            action = agent.act(state) # 0~277
+            print 'action: ', action
+            act_rotate = True if action % 2 == 0 else False
+            action /= 2
+            act_scale = action % 4
+            action /= 4
+            act_angle = action % 6
+            action /= 6
+            act_object = action
+            print 'object: ', act_object
+            print 'angle: ', act_angle
+            print 'scale: ', act_scale
+            print 'rotate: ', act_rotate
+            # Must send this action back to Unity via OSC.
+
+            #next_state, reward, done, _ = env.step(action)
+            #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
+
+            # Must update next_state, reward, done via OSC.
+
+            next_state = np.random.normal(size=state_size)
+
+            done = True if next_state[1] < 0 and next_state[2] < 0 and next_state[3] < 0 else False
+            reward = 1 if not done else -10
+
+            next_state = np.reshape(next_state, [1, state_size])
+
+            agent.remember(state, action, reward, next_state, done)
+            state = next_state
+            if done:
+                print("episode: {}/{}, score: {}, e: {:.2}"
+                      .format(e, EPISODES, time, agent.epsilon))
+                break
+        if len(agent.memory) > batch_size:
+            agent.replay(batch_size)
+        # if e % 10 == 0:
+        #     agent.save("./save/cartpole.h5")
