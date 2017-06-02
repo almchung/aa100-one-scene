@@ -14,6 +14,7 @@ public class DataInputModule : MonoBehaviour {
     public Vector3 angularVel;
     public float linear_scale;
     private DateTime currentTime;
+    public string message;
 
     private string filePath;
     private string delimiter = ",";
@@ -67,10 +68,11 @@ public class DataInputModule : MonoBehaviour {
             angularVel = currentAngle - prevAngle;
             prevAngle = currentAngle;
 
-            //Debug.Log("Pos: " + currentPosition + ", Angle: " + currentAngle + ", Linear Vel:" + velocity + ", Angular Vel:" + angularVel);
+            Debug.Log("Pos: " + currentPosition + ", Angle: " + currentAngle + ", Linear Vel:" + velocity + ", Angular Vel:" + angularVel);
             currentTime = DateTime.Now;
             UpdateInputMatrix(Time.frameCount, currentPosition, currentAngle, velocity, angularVel);
             WriteVectorsToCSV(currentTime.ToString("hh:mm:ss.fff tt"), currentPosition, currentAngle, velocity, angularVel);
+
         }
     }
 
@@ -91,6 +93,8 @@ public class DataInputModule : MonoBehaviour {
         inputArray[ind, 9] = avel.x;
         inputArray[ind, 10] = avel.y;
         inputArray[ind, 11] = avel.z;
+        
+        message = "/inputs " + pos.x +" "+ pos.y + " " + pos.z + " " + ang.x + " " + ang.y + " " + ang.z + " " + vel.x + " " + vel.y + " " + vel.z + " " + avel.x + " " + avel.y + " " + avel.z;
     }
 
     public void ResetInputArray()
@@ -102,8 +106,8 @@ public class DataInputModule : MonoBehaviour {
     private void WriteVectorsToCSV(String time, Vector3 pos, Vector3 ang, Vector3 vel, Vector3 avel)
     {
         string[] output = new string[] {time, StringifyVector(pos), StringifyVector(ang), StringifyVector(vel), StringifyVector(avel) };
-
-        WriteToCSV(output);
+        
+        //WriteToCSV(output);
     }
 
     private void WriteToCSV(string[] output)

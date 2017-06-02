@@ -65,7 +65,7 @@ class DQNAgent:
 
 def inputHandler(addr, tags, data, source):
     # get input from Unity via OSC
-    print "received new osc msg from %s" % getUrlStr(source)
+    # print "received new osc msg from %s"  
     print "addr : %s" % addr
     #print "typetags :%s" % tags
     print "data: %s" % data
@@ -93,7 +93,7 @@ if __name__ == "__main__":  # main function
     print 'server'
 
     # bind addresses to functions
-    setOSCHandler('/outputs', inputHandler)
+    setOSCHandler('/inputs', inputHandler)
     print 'check'
 
     startOSCServer() # and now set it into action
@@ -102,13 +102,13 @@ if __name__ == "__main__":  # main function
 
 
 def outputHandler(data):
-    sendOSCMsg("/inputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
+    sendOSCMsg("/outputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
 
 
 def runModel():
     #for e in range(EPISODES):
     # get input from Unity via OSC
-    print "received new osc msg from %s" % getUrlStr(source)
+    # print "received new osc msg from %s"
     print "addr : %s" % addr
     #print "typetags :%s" % tags
     print "data: %s" % data

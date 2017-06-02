@@ -11,7 +11,6 @@ public class OSCTestSender : MonoBehaviour
 {
 
     private Osc oscHandler;
-    public MicrophoneInput myMic;
     public DataInputModule myHeadset;
     public string remoteIp;
     public int sendToPort;
@@ -37,8 +36,8 @@ public class OSCTestSender : MonoBehaviour
     {
         //Debug.LogWarning("time = " + Time.time);
         
-        OscMessage oscM = Osc.StringToOscMessage("/inputs " + myMic.loudness + ' ' + myHeadset.currentAngle.x + ' ' + myHeadset.currentAngle.y + ' ' + myHeadset.currentAngle.z);
-        Debug.Log(oscM);
+        OscMessage oscM = Osc.StringToOscMessage(myHeadset.message);
+        Debug.Log(myHeadset.message);
         oscHandler.Send(oscM);  
     }
 
