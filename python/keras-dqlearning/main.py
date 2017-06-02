@@ -12,6 +12,7 @@ from simpleOSC import initOSCClient, initOSCServer, setOSCHandler, sendOSCMsg, c
 
 EPISODES = 20
 
+count = 0
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -63,17 +64,23 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
-def inputHandler(addr, tags, data, source):
+def currentHandler(addr, tags, data, source):
     # get input from Unity via OSC
     # print "received new osc msg from %s"
-    print "addr : %s" % addr
     #print "typetags :%s" % tags
-    print "data: %s" % data
+    # data.length = 14
+    print "current state data: %s" % data
 
+def nextHandler(addr, tags, data, source):
+    # get input from Unity via OSC
+    # print "received new osc msg from %s"
+    #print "typetags :%s" % tags
+    # data.length = 14
+    print "next state data: %s" % data
 
 if __name__ == "__main__":  # main function
     # setup Learning Model
-    state_size = 14
+    state_size = 13
     num_objects = 30
     num_angle_step = 6
     num_scale_step = 4
@@ -93,19 +100,15 @@ if __name__ == "__main__":  # main function
     print 'server'
 
     # bind addresses to functions
-    setOSCHandler('/inputs', inputHandler)
+    setOSCHandler('/inputs_current', currentState)
+    setOSCHandler('/inputs_next', nextState)
     print 'check'
 
     startOSCServer() # and now set it into action
 
     print 'ready to receive and send osc messages ...'
 
-
-def outputHandler(data):
-    sendOSCMsg("/outputs", data) # !! it sends by default to localhost ip "127.0.0.1" and port 9000
-
-
-def runModel():
+def currentState(data):
     #for e in range(EPISODES):
     # get input from Unity via OSC
     # print "received new osc msg from %s"
@@ -120,7 +123,15 @@ def runModel():
 
     #for time in range(500):
     action = agent.act(state)
+    #for debug
     print 'action: ', action
+
+    num_objects = 30
+    num_angle_step = 6
+    num_scale_step = 4
+    num_dist_step = 4
+    num_rotation_bool = 2
+
     act_rotate = True if action % num_rotation_bool == 0 else False
     action /= num_rotation_bool
     act_scale = action % num_scale_step
@@ -135,22 +146,27 @@ def runModel():
     print 'dist: ', act_dist
     print 'scale: ', act_scale
     print 'rotate: ', act_rotate
+    
     # Must send this action back to Unity via OSC.
+    sendOSCMsg("/outputs", action)
 
     #next_state, reward, done, _ = env.step(action)
     #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
 
+def nextState(data):
     # Must update next_state, reward, done via OSC.
-
     next_state = np.random.normal(size=state_size)
 
-    done = True if next_state[1] < 0 and next_state[2] < 0 and next_state[3] < 0 else False
+    done = True if data[13] == 0 else False
     reward = 1 if not done else -10
 
-    next_state = np.reshape(next_state, [1, state_size])
+    next_state = data
+    #next_state = np.reshape(next_state, [1, state_size])
 
     agent.remember(state, action, reward, next_state, done)
     state = next_state
+
+    sendOSCMsg("/request")
 
     if done:
         print("episode: {}/{}, score: {}, e: {:.2}"
