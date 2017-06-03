@@ -68,7 +68,7 @@ def currentState(data):
     #for e in range(EPISODES):
     # get input from Unity via OSC
     # print "received new osc msg from %s"
-    print "addr : %s" % addr
+    #print "addr : %s" % addr
     #print "typetags :%s" % tags
     print "data: %s" % data
 
@@ -139,7 +139,7 @@ def currentHandler(addr, tags, data, source):
     # print "received new osc msg from %s"
     #print "typetags :%s" % tags
     # data.length = 14
-    print "current state data: %s" % data
+    #print "current state data: %s" % data
     currentState(data)
 
 def nextHandler(addr, tags, data, source):
@@ -147,7 +147,7 @@ def nextHandler(addr, tags, data, source):
     # print "received new osc msg from %s"
     #print "typetags :%s" % tags
     # data.length = 14
-    print "next state data: %s" % data
+    #print "next state data: %s" % data
     nextState(data)
 
 if __name__ == "__main__":  # main function
