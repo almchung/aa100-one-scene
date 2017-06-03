@@ -128,12 +128,13 @@ def nextState(data):
     agent.remember(state, action_current, reward, next_state, done)
     state = next_state
 
-    sendOSCMsg("/request")
-
     if done:
-        e += 1
+        e = e + 1
         print(">>>> episode: {}/{}, score: {}, e: {:.2}"
             .format(e, EPISODES, time, agent.epsilon))
+    else:
+        sendOSCMsg("/request")
+        
         #if len(agent.memory) > batch_size:
         #    agent.replay(batch_size)
         # if e % 10 == 0:
