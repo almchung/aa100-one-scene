@@ -86,7 +86,13 @@ public class OSCTestSender : MonoBehaviour
         oscHandler.init(udp);
         
         oscHandler.SetAddressHandler("/hand1", Example);
+        StartCoroutine(Initialize());
 
+    }
+
+    IEnumerator Initialize()
+    {
+        yield return new WaitForSeconds(1);
         Send("/inputs_current ");
     }
 
