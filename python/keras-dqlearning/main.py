@@ -73,6 +73,7 @@ def currentState(data):
     #print "addr : %s" % addr
     #print "typetags :%s" % tags
     print "data: %s" % data
+    print "e: %d" % e
 
     #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
     #state = np.reshape(state, [1, state_size])
@@ -117,7 +118,7 @@ def nextState(data):
     print 'next state : ', state
     next_state = np.random.normal(size=state_size)
 
-    done = True if data[13] == 1 else False
+    done = True if data[12] == 1 else False
     reward = 1 if not done else -10
 
     next_state = data
