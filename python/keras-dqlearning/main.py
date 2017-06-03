@@ -11,6 +11,7 @@ from simpleOSC import initOSCClient, initOSCServer, setOSCHandler, sendOSCMsg, c
      createOSCBundle, sendOSCBundle, startOSCServer
 
 EPISODES = 20
+e = 1
 
 count = 0
 action_current = 0
@@ -76,7 +77,7 @@ def currentState(data):
     #state = np.random.normal(size=state_size) # <- Must receive message via OSC. debug only
     #state = np.reshape(state, [1, state_size])
     state = data
-    print '>> current state : ', state
+    print 'current state : ', state
 
     #for time in range(500):
     action = agent.act(state)
@@ -113,10 +114,10 @@ def currentState(data):
 def nextState(data):
     # Must update next_state, reward, done via OSC.
     state = data
-    print '>> next state : ', state
+    print 'next state : ', state
     next_state = np.random.normal(size=state_size)
 
-    done = True if data[12] == 0 else False
+    done = True if data[12] == 1 else False
     reward = 1 if not done else -10
 
     next_state = data
@@ -128,8 +129,9 @@ def nextState(data):
     sendOSCMsg("/request")
 
     if done:
-        print("episode: {}/{}, score: {}, e: {:.2}"
+        print(">> episode: {}/{}, score: {}, e: {:.2}"
             .format(e, EPISODES, time, agent.epsilon))
+        e += 1
         #if len(agent.memory) > batch_size:
         #    agent.replay(batch_size)
         # if e % 10 == 0:
