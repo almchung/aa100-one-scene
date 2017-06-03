@@ -81,6 +81,8 @@ def currentState(data):
     action = agent.act(state)
     #for debug
     print 'action: ', action
+    # Must send this action back to Unity via OSC.
+    sendOSCMsg("/outputs", [action])
 
     num_objects = 30
     num_angle_step = 6
@@ -102,9 +104,6 @@ def currentState(data):
     print 'dist: ', act_dist
     print 'scale: ', act_scale
     print 'rotate: ', act_rotate
-
-    # Must send this action back to Unity via OSC.
-    sendOSCMsg("/outputs", [action])
 
     #next_state, reward, done, _ = env.step(action)
     #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
