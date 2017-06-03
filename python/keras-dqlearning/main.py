@@ -114,7 +114,7 @@ def nextState(data):
     print '>> next state : ', state
     next_state = np.random.normal(size=state_size)
 
-    done = True if data[13] == 0 else False
+    done = True if data[12] == 0 else False
     reward = 1 if not done else -10
 
     next_state = data
