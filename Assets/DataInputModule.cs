@@ -54,12 +54,14 @@ public class DataInputModule : MonoBehaviour {
     void Update()
     {
         MeasureVRHead();
-        if (Input.GetAxis("Jump") != 0)
-        {
-            entertained = 1;
-        } else
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             entertained = 0;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            entertained = 1;
         }
     }
 

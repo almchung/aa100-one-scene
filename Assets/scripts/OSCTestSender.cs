@@ -34,6 +34,10 @@ public class OSCTestSender : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (Input.GetButtonDown("Jump"))
+        {
+            Initialize();
+        }
         //Debug.LogWarning("time = " + Time.time);  
     }
 
@@ -55,15 +59,12 @@ public class OSCTestSender : MonoBehaviour
 
     public void SendNext()
     {
-        StartCoroutine(WaitAndSend());
-    }
-
-    IEnumerator WaitAndSend()
-    {
-        yield return new WaitForSeconds(1);
-
+        Debug.Log("sending Next");
         Send("/inputs_next ");
+    
     }
+
+  
 
     void OnDisable()
     {
@@ -86,13 +87,13 @@ public class OSCTestSender : MonoBehaviour
         oscHandler.init(udp);
         
         oscHandler.SetAddressHandler("/hand1", Example);
-        StartCoroutine(Initialize());
+        
 
     }
 
-    IEnumerator Initialize()
+    void Initialize()
     {
-        yield return new WaitForSeconds(1);
+
         Send("/inputs_current ");
     }
 
