@@ -62,7 +62,7 @@ public class OSCTestSender : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        Send("inputNext ");
+        Send("/input_next ");
     }
 
     void OnDisable()
@@ -86,6 +86,8 @@ public class OSCTestSender : MonoBehaviour
         oscHandler.init(udp);
         
         oscHandler.SetAddressHandler("/hand1", Example);
+
+        Send("/input_current ");
     }
 
     public static void Example(OscMessage m)
