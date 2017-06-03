@@ -108,7 +108,7 @@ if __name__ == "__main__":  # main function
 
     print 'ready to receive and send osc messages ...'
 
-def currentState(data):
+def currentState(addr, tags, data, source):
     #for e in range(EPISODES):
     # get input from Unity via OSC
     # print "received new osc msg from %s"
@@ -153,7 +153,7 @@ def currentState(data):
     #next_state, reward, done, _ = env.step(action)
     #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
 
-def nextState(data):
+def nextState(addr, tags, data, source):
     # Must update next_state, reward, done via OSC.
     state = data
     print '>> next state : ', state
