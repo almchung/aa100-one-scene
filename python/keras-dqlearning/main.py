@@ -104,7 +104,7 @@ def currentState(data):
     print 'rotate: ', act_rotate
 
     # Must send this action back to Unity via OSC.
-    sendOSCMsg("/outputs", action)
+    sendOSCMsg("/outputs", [action])
 
     #next_state, reward, done, _ = env.step(action)
     #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
