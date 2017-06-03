@@ -13,6 +13,7 @@ from simpleOSC import initOSCClient, initOSCServer, setOSCHandler, sendOSCMsg, c
 EPISODES = 20
 
 count = 0
+action_current = 0
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -79,6 +80,7 @@ def currentState(data):
 
     #for time in range(500):
     action = agent.act(state)
+    action_current = action
     #for debug
     print 'action: ', action
     # Must send this action back to Unity via OSC.
@@ -120,7 +122,7 @@ def nextState(data):
     next_state = data
     #next_state = np.reshape(next_state, [1, state_size])
 
-    agent.remember(state, action, reward, next_state, done)
+    agent.remember(state, action_current, reward, next_state, done)
     state = next_state
 
     sendOSCMsg("/request")
