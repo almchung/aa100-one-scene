@@ -64,20 +64,6 @@ class DQNAgent:
     def save(self, name):
         self.model.save_weights(name)
 
-def currentHandler(addr, tags, data, source):
-    # get input from Unity via OSC
-    # print "received new osc msg from %s"
-    #print "typetags :%s" % tags
-    # data.length = 14
-    print "current state data: %s" % data
-
-def nextHandler(addr, tags, data, source):
-    # get input from Unity via OSC
-    # print "received new osc msg from %s"
-    #print "typetags :%s" % tags
-    # data.length = 14
-    print "next state data: %s" % data
-
 def currentState(data):
     #for e in range(EPISODES):
     # get input from Unity via OSC
@@ -147,6 +133,22 @@ def nextState(data):
         #    agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole.h5")
+
+def currentHandler(addr, tags, data, source):
+    # get input from Unity via OSC
+    # print "received new osc msg from %s"
+    #print "typetags :%s" % tags
+    # data.length = 14
+    print "current state data: %s" % data
+    currentState(data)
+
+def nextHandler(addr, tags, data, source):
+    # get input from Unity via OSC
+    # print "received new osc msg from %s"
+    #print "typetags :%s" % tags
+    # data.length = 14
+    print "next state data: %s" % data
+    nextState(data)
 
 if __name__ == "__main__":  # main function
     # setup Learning Model
