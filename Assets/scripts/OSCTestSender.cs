@@ -48,7 +48,7 @@ public class OSCTestSender : MonoBehaviour
     public void Send(string prefix)
     {
         string message = prefix + myHeadset.message;
-        OscMessage oscM = Osc.StringToOscMessage(myHeadset.message);
+        OscMessage oscM = Osc.StringToOscMessage(message);
         //Debug.Log(myHeadset.message);
         oscHandler.Send(oscM);
     }
@@ -62,7 +62,7 @@ public class OSCTestSender : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
 
-        Send("/input_next ");
+        Send("/inputs_next ");
     }
 
     void OnDisable()
@@ -87,7 +87,7 @@ public class OSCTestSender : MonoBehaviour
         
         oscHandler.SetAddressHandler("/hand1", Example);
 
-        Send("/input_current ");
+        Send("/inputs_current ");
     }
 
     public static void Example(OscMessage m)

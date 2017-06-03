@@ -47,7 +47,7 @@ public class OSCReceiverC : MonoBehaviour {
 
     public void messageHandlerRequest(OscMessage oscMessage)
     {
-        sender.Send("/input_current ");
+        sender.Send("/inputs_current ");
     }
 
     public void messageHandler(OscMessage oscMessage)
