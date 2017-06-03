@@ -78,8 +78,6 @@ def nextHandler(addr, tags, data, source):
     # data.length = 14
     print "next state data: %s" % data
 
-
-
 def currentState(data):
     #for e in range(EPISODES):
     # get input from Unity via OSC
@@ -174,36 +172,6 @@ if __name__ == "__main__":  # main function
     # bind addresses to functions
     setOSCHandler('/inputs_current', currentHandler)
     setOSCHandler('/inputs_next', nextHandler)
-    print 'address binding check'
-
-    startOSCServer() # and now set it into action
-
-    print 'ready to receive and send osc messages ...'
-
-if __name__ == "__main__":  # main function
-    # setup Learning Model
-    state_size = 14
-    num_objects = 30
-    num_angle_step = 6
-    num_scale_step = 4
-    num_dist_step = 4
-    num_rotation_bool = 2
-    action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
-
-    agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-master.h5")
-    done = False
-    batch_size = 32
-
-    # setup OSC parts
-    initOSCClient() # takes args : ip, port
-    print 'client'
-    initOSCServer() # takes args : ip, port, mode --> 0 for basic server, 1 for threading server, 2 for forking server
-    print 'server'
-
-    # bind addresses to functions
-    setOSCHandler('/inputs_current', currentState)
-    setOSCHandler('/inputs_next', nextState)
     print 'address binding check'
 
     startOSCServer() # and now set it into action
