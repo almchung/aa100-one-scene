@@ -117,7 +117,7 @@ def nextState(data):
     print 'next state : ', state
     next_state = np.random.normal(size=state_size)
 
-    done = True if data[12] == 1 else False
+    done = True if data[13] == 1 else False
     reward = 1 if not done else -10
 
     next_state = data
@@ -129,7 +129,7 @@ def nextState(data):
     sendOSCMsg("/request")
 
     if done:
-        print(">> episode: {}/{}, score: {}, e: {:.2}"
+        print(">>>> episode: {}/{}, score: {}, e: {:.2}"
             .format(e, EPISODES, time, agent.epsilon))
         e += 1
         #if len(agent.memory) > batch_size:
