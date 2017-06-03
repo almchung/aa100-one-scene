@@ -39,15 +39,15 @@ public class OSCReceiverC : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        myCube.transform.eulerAngles = new Vector3(sig1 * 360, sig2 * 360, myCube.transform.eulerAngles.z);
+        /*myCube.transform.eulerAngles = new Vector3(sig1 * 360, sig2 * 360, myCube.transform.eulerAngles.z);
         myCube.transform.position = new Vector3(sig4 * 10, sig3 * 10, myCube.transform.position.z);
-        myCube.GetComponent<Renderer>().material.color = Color.HSVToRGB(sig5, 1, 1);
+        myCube.GetComponent<Renderer>().material.color = Color.HSVToRGB(sig5, 1, 1);*/
 
     }
 
     public void messageHandlerRequest(OscMessage oscMessage)
     {
-        sender.Send("inputCurrent ");
+        sender.Send("/input_current ");
     }
 
     public void messageHandler(OscMessage oscMessage)

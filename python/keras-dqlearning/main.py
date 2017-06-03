@@ -78,37 +78,9 @@ def nextHandler(addr, tags, data, source):
     # data.length = 14
     print "next state data: %s" % data
 
-if __name__ == "__main__":  # main function
-    # setup Learning Model
-    state_size = 14
-    num_objects = 30
-    num_angle_step = 6
-    num_scale_step = 4
-    num_dist_step = 4
-    num_rotation_bool = 2
-    action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
 
-    agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-master.h5")
-    done = False
-    batch_size = 32
 
-    # setup OSC parts
-    initOSCClient() # takes args : ip, port
-    print 'client'
-    initOSCServer() # takes args : ip, port, mode --> 0 for basic server, 1 for threading server, 2 for forking server
-    print 'server'
-
-    # bind addresses to functions
-    setOSCHandler('/inputs_current', currentState)
-    setOSCHandler('/inputs_next', nextState)
-    print 'address binding check'
-
-    startOSCServer() # and now set it into action
-
-    print 'ready to receive and send osc messages ...'
-
-def currentState(addr, tags, data, source):
+def currentState(data):
     #for e in range(EPISODES):
     # get input from Unity via OSC
     # print "received new osc msg from %s"
@@ -153,7 +125,7 @@ def currentState(addr, tags, data, source):
     #next_state, reward, done, _ = env.step(action)
     #raw_input('this is where osc sends a message to python ML algorithm. Just type anything here: ')
 
-def nextState(addr, tags, data, source):
+def nextState(data):
     # Must update next_state, reward, done via OSC.
     state = data
     print '>> next state : ', state
@@ -177,3 +149,63 @@ def nextState(addr, tags, data, source):
         #    agent.replay(batch_size)
         # if e % 10 == 0:
         #     agent.save("./save/cartpole.h5")
+
+if __name__ == "__main__":  # main function
+    # setup Learning Model
+    state_size = 14
+    num_objects = 30
+    num_angle_step = 6
+    num_scale_step = 4
+    num_dist_step = 4
+    num_rotation_bool = 2
+    action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
+
+    agent = DQNAgent(state_size, action_size)
+    # agent.load("./save/cartpole-master.h5")
+    done = False
+    batch_size = 32
+
+    # setup OSC parts
+    initOSCClient() # takes args : ip, port
+    print 'client'
+    initOSCServer() # takes args : ip, port, mode --> 0 for basic server, 1 for threading server, 2 for forking server
+    print 'server'
+
+    # bind addresses to functions
+    setOSCHandler('/inputs_current', currentHandler)
+    setOSCHandler('/inputs_next', nextHandler)
+    print 'address binding check'
+
+    startOSCServer() # and now set it into action
+
+    print 'ready to receive and send osc messages ...'
+
+if __name__ == "__main__":  # main function
+    # setup Learning Model
+    state_size = 14
+    num_objects = 30
+    num_angle_step = 6
+    num_scale_step = 4
+    num_dist_step = 4
+    num_rotation_bool = 2
+    action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
+
+    agent = DQNAgent(state_size, action_size)
+    # agent.load("./save/cartpole-master.h5")
+    done = False
+    batch_size = 32
+
+    # setup OSC parts
+    initOSCClient() # takes args : ip, port
+    print 'client'
+    initOSCServer() # takes args : ip, port, mode --> 0 for basic server, 1 for threading server, 2 for forking server
+    print 'server'
+
+    # bind addresses to functions
+    setOSCHandler('/inputs_current', currentState)
+    setOSCHandler('/inputs_next', nextState)
+    print 'address binding check'
+
+    startOSCServer() # and now set it into action
+
+    print 'ready to receive and send osc messages ...'
