@@ -47,11 +47,17 @@ public class OSCReceiverC : MonoBehaviour {
 
     public void messageHandlerRequest(OscMessage oscMessage)
     {
+        Debug.Log("got request");
         sender.Send("/inputs_current ");
     }
 
     public void messageHandler(OscMessage oscMessage)
     {
+        
+        for (int i = 0; i < oscMessage.Values.Count; i++)
+        {
+            Debug.Log("int value:" + oscMessage.Values[i]);
+        }
         int action = (int)oscMessage.Values[0];
         int state_size = 14;
         int num_objects = 30;
@@ -77,8 +83,8 @@ public class OSCReceiverC : MonoBehaviour {
         act_object = action;
 
         Debug.Log("Called Example One > " + Osc.OscMessageToString(oscMessage));
-	    Debug.Log("Message Values > " + oscMessage.Values[0] + " " + oscMessage.Values[1] + " " + oscMessage.Values[2] + " " + oscMessage.Values[3] + " " + oscMessage.Values[4]);
 
         sender.SendNext();
+        Debug.Log("after message sending");
     } 
 }
