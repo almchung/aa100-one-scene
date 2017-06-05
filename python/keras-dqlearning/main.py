@@ -130,11 +130,12 @@ def nextState(data):
 
     if done:
         e = e + 1
+        agent.save("./save/onescene.h5")
         print(">>>> episode: {}/{}, score: {}, e: {:.2}"
             .format(e, EPISODES, time, agent.epsilon))
     else:
         sendOSCMsg("/request")
-        
+
         #if len(agent.memory) > batch_size:
         #    agent.replay(batch_size)
         # if e % 10 == 0:
@@ -167,7 +168,7 @@ if __name__ == "__main__":  # main function
     action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
 
     agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-master.h5")
+    agent.load("./save/onescene.h5")
     done = False
     batch_size = 32
 
