@@ -30,7 +30,7 @@ public class SceneRenderModule : MonoBehaviour {
             actionArray = mlModel.outputArray;
             DecodeActionArray();
         }
-        RenderScene();
+        /*RenderScene();*/
     }
 
     void DecodeActionArray()
@@ -53,7 +53,7 @@ public class SceneRenderModule : MonoBehaviour {
             }
         }
     }
-
+    /*
     void RenderScene()
     {
         Renderer renderer0 = GameObject.Find(objNameArray[0]).GetComponent<Renderer>();
@@ -65,5 +65,5 @@ public class SceneRenderModule : MonoBehaviour {
         renderer1.enabled = objVisibleArray[1];
         renderer2.enabled = objVisibleArray[2];
         renderer3.enabled = objVisibleArray[3];
-    }
+    }*/
 }

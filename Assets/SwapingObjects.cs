@@ -37,6 +37,15 @@ public class SwapingObjects : MonoBehaviour {
             selectedModel = newSelectedModel;
             SpawnObject();
             index++;
+            index %= currentObjects.Length;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            for(int i = 0; i < currentObjects.Length; i++)
+            {
+                Destroy(currentObjects[i]);
+            }
         }
 	}
 

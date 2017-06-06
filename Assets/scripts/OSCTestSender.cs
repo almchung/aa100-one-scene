@@ -59,7 +59,6 @@ public class OSCTestSender : MonoBehaviour
 
     public void SendNext()
     {
-        Debug.Log("sending Next");
         Send("/inputs_next ");
     
     }

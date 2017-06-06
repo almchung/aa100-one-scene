@@ -19,6 +19,8 @@ public class OSCReceiverC : MonoBehaviour {
     public int act_dist;
     public int act_angle;
     public int act_object;
+    private bool startFrameCounter;
+    private int frames;
     // Use this for initialization
     void Start () {
         //Initializes on start up to listen for messages
@@ -37,6 +39,16 @@ public class OSCReceiverC : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (startFrameCounter)
+        {
+            frames++;
+        }
+        if(frames > 60)
+        {
+            startFrameCounter = false;
+            frames = 0;
+            sender.SendNext();
+        }
         /*myCube.transform.eulerAngles = new Vector3(sig1 * 360, sig2 * 360, myCube.transform.eulerAngles.z);
         myCube.transform.position = new Vector3(sig4 * 10, sig3 * 10, myCube.transform.position.z);
         myCube.GetComponent<Renderer>().material.color = Color.HSVToRGB(sig5, 1, 1);*/
@@ -88,8 +100,7 @@ public class OSCReceiverC : MonoBehaviour {
 
 
         Debug.Log("Called Example One > " + Osc.OscMessageToString(oscMessage));
-
-        sender.SendNext();
+        startFrameCounter = true;
         Debug.Log("after message sending");
     } 
 }
