@@ -13,3 +13,6 @@
 10. pip install keras
 
 11. update keras.json: 'tensorflow' -> 'theano'
+
+12. pip install lib
+13. pip install h5py
