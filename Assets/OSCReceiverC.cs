@@ -11,11 +11,9 @@ public class OSCReceiverC : MonoBehaviour {
 
     public GameObject myCube; 
     private Osc handler;
-    public float sig1 = 0;
-    public float sig2 = 0;
-    public float sig3 = 0;
-    public float sig4 = 0;
-    public float sig5 = 0;
+
+    public SwapingObjects objectSwaper;
+
     public bool act_rotate;
     public int act_scale;
     public int act_dist;
@@ -81,6 +79,13 @@ public class OSCReceiverC : MonoBehaviour {
         act_angle = action % num_angle_step;
         action /= num_angle_step;
         act_object = action;
+
+        objectSwaper.polarPosition = act_angle;
+        objectSwaper.rotation = act_rotate;
+        objectSwaper.scale = act_scale;
+        objectSwaper.distance = act_dist;
+        objectSwaper.newSelectedModel = act_object;
+
 
         Debug.Log("Called Example One > " + Osc.OscMessageToString(oscMessage));
 
