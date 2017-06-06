@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import random
 import numpy as np
+import sys
+from pathlib2 import Path
 
 from collections import deque
 from keras.models import Sequential
@@ -118,7 +120,13 @@ def nextState(data):
     print 'next state : ', state
     next_state = np.random.normal(size=state_size)
 
-    done = True if data[12] == 1 else False
+    if data[12] == 1:
+        done = True
+    elif data[12] == 2:
+        sys.exit(0)
+    else:
+        done = False;
+
     print(done)
     reward = 1 if not done else -10
 
@@ -130,7 +138,8 @@ def nextState(data):
 
     if done:
         e = e + 1
-        agent.save("./save/onescene.h5")
+        agent.save("./save/weights.h5")
+
         print(">>>> episode: {}/{}, score: {}, e: {:.2}"
             .format(e, EPISODES, time, agent.epsilon))
     else:
@@ -168,7 +177,13 @@ if __name__ == "__main__":  # main function
     action_size = num_objects * num_angle_step * num_scale_step * num_dist_step * num_rotation_bool
 
     agent = DQNAgent(state_size, action_size)
-    agent.load("./save/onescene.h5")
+    my_file = Path("./save/weights.h5")
+
+    if my_file.is_file():
+        agent.load("./save/weights.h5")
+    else:
+        agent.save("./save/weights.h5")
+
     done = False
     batch_size = 32
 
@@ -184,5 +199,4 @@ if __name__ == "__main__":  # main function
     print 'address binding check'
 
     startOSCServer() # and now set it into action
-
     print 'ready to receive and send osc messages ...'
