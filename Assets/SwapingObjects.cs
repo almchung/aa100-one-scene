@@ -25,11 +25,7 @@ public class SwapingObjects : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        newSelectedModel = data.act_object;
-        discretePolar = data.act_angle;
-        rotation = data.act_rotate;
-        scale = data.act_scale;
-        distance = data.act_dist;
+
 
         if (newSelectedModel != selectedModel)
         {
@@ -47,7 +43,13 @@ public class SwapingObjects : MonoBehaviour {
                 Destroy(currentObjects[i]);
             }
         }
-	}
+
+        newSelectedModel = data.act_object;
+        discretePolar = data.act_angle;
+        rotation = data.act_rotate;
+        scale = data.act_scale;
+        distance = data.act_dist;
+    }
 
     void SpawnObject()
     {
