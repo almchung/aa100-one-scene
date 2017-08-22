@@ -4,7 +4,7 @@ Sarah B, A Mira C and Eric F
 [![youtube video](https://img.youtube.com/vi/zwdh9L1OKEc/0.jpg))](https://youtu.be/zwdh9L1OKEc)
 
 ## Concept:
-Neural network system as a submissive-responsive controller of the virtual space
+To Use neural network system as a submissive-responsive controller of a VR experience-space.
 
 * “Branching” of the state based on user head movement
 * Machine trying to maximize the time the user stay in the VR environment
